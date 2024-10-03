@@ -1,32 +1,48 @@
 import { useState, useEffect } from 'react';
 
 type CounterProps = {
-	initialCount: number;
+  initialCount: number;
+  onUnmount: () => void;
 };
 
-export const Counter: React.FC<CounterProps> = ({ initialCount }) => {
-	const [count, setCount] = useState(initialCount);
+export const Counter: React.FC<CounterProps> = ({ initialCount, onUnmount }) => {
+  const [count, setCount] = useState(initialCount);
+  const TOTAL_COUNT = 10;
 
-	useEffect(() => {
-		console.log('Componente montado!');
+  useEffect(() => {
+    const handleCounterMount = new CustomEvent('onCounterMount');
 
-		return () => {
-			console.log('Componente desmontado!');
-		};
-	}, []);
+    window.dispatchEvent(handleCounterMount);
 
-	useEffect(() => {
-		console.log('Componente atualizado!');
-	});
+    return () => {
+      const handleCounterUnmount = new CustomEvent('onCounterUnmount');
+	  	  
+	  if (count > 0) {
+      	window.dispatchEvent(handleCounterUnmount);
+	  }
+    };
+  }, []);
 
-	const handleIncrement = () => {
-		setCount((prevCount) => prevCount + 1);
-	};
+  useEffect(() => {
+    const handleCounterUpdate = new CustomEvent('onCounterUpdate', { detail: { count } });
+    window.dispatchEvent(handleCounterUpdate);
 
-	return (
-		<div>
-			<h2>Contador: {count}</h2>
-			<button onClick={handleIncrement}>Incrementar +</button>
-		</div>
-	);
+    if (count === TOTAL_COUNT) {
+      const handleCounterUnmount = new CustomEvent('onCounterUnmount');
+
+      window.dispatchEvent(handleCounterUnmount);
+      onUnmount();
+    }
+  }, [count, onUnmount]);
+
+  const handleIncrement = () => {
+    setCount((prevCount) => prevCount + 1);
+  };
+
+  return (
+    <div>
+      <h2>Contador: {count}</h2>
+      <button onClick={handleIncrement}>Incrementar +</button>
+    </div>
+  );
 };
