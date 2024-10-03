@@ -1,11 +1,3 @@
-/**
- * Lista
- *
- * - Primeiramente vá até /src/pages/api/users/index.ts e implemente a API
- * - Obter a lista de usuários da API
- * - Renderizar a lista de usuários
- */
-
 import { useEffect, useState } from 'react';
 
 import styles from '@/styles/lista.module.css';
@@ -37,8 +29,15 @@ export default function Lista() {
 				<h2>Lista de usuários</h2>
 
 				<div data-list-container>
-					{/* Exemplo */}
-					<div data-list-item>ID 323 - Usuário 323 (user-323@mail.com)</div>
+					{users.length > 0 ? (
+						users.map((user) => (
+							<div key={user.id} data-list-item>
+								ID {user.id} - {user.name} ({user.email})
+							</div>
+						))
+					) : (
+						<p>Nenhum usuário encontrado.</p>
+					)}
 				</div>
 			</div>
 		</div>
