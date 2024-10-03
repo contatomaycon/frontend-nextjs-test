@@ -31,7 +31,7 @@ export const Modal: React.FC<ModalProps> = ({
     }
   }
 
-  function handleConfirmClick(e: React.MouseEvent) {
+  function handleConfirmClick() {
     props.onConfirm?.();
   }
 

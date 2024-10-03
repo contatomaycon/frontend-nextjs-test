@@ -1,8 +1,7 @@
+import { IMethod } from '@/types/method';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 
-type TMethod = 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
-
-export function ApiMethod(method: TMethod) {
+export function ApiMethod(method: IMethod) {
   return function (
     handler: (
       req: NextApiRequest,
@@ -11,13 +10,11 @@ export function ApiMethod(method: TMethod) {
   ) {
     return async function (req: NextApiRequest, res: NextApiResponse) {
       if (req.method !== method) {
-        return res
-          .status(405)
-          .json({
-            ok: false,
-            message: 'Method not allowed',
-            ptMessage: 'Método não permitido',
-          });
+        return res.status(405).json({
+          ok: false,
+          message: 'Method not allowed',
+          ptMessage: 'Método não permitido',
+        });
       }
 
       return handler(req, res);
