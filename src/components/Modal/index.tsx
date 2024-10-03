@@ -13,15 +13,13 @@ type ModalProps = {
 	};
 };
 
-/* 
-	Modal
-
-	- Ao clicar no wrapper do modal, o modal deve ser fechado, porém esta ação deve ser ignorada caso o usuário clique em qualquer elemento dentro do modal
-*/
-
 export const Modal: React.FC<ModalProps> = ({ children, title, isOpen, ...props }) => {
 	function handleCloseClick(e: React.MouseEvent) {
-		props.onClose?.('click', e.target);
+		const target = e.target as HTMLElement;
+		
+		if (target.dataset.modalWrapper || target.dataset.modalClose || target.dataset.modalCancel) {
+			props.onClose?.('click', e.target);
+		}
 	}
 
 	function handleConfirmClick(e: React.MouseEvent) {
@@ -36,7 +34,7 @@ export const Modal: React.FC<ModalProps> = ({ children, title, isOpen, ...props 
 
 	return (
 		<div data-modal-wrapper className={styles.wrapper} onClick={handleCloseClick} onKeyDown={handleKeyDown}>
-			<div data-modal-container>
+			<div data-modal-container onClick={(e) => e.stopPropagation()}>
 				<header data-modal-header>
 					<h2>{title}</h2>
 
@@ -62,3 +60,4 @@ export const Modal: React.FC<ModalProps> = ({ children, title, isOpen, ...props 
 		</div>
 	);
 };
+

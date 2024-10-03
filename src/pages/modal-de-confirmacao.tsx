@@ -1,21 +1,18 @@
-/**
- * Modal de confirmação
- *
- * - Crie um component para o modal de confirmação
- * - Utilize o código abaixo como base
- * - O modal deve ser aberto ao clicar no botão "Abrir modal de confirmação"
- * - O título deve ser "Confirmação"
- * - O conteudo deve ser dinâmico
- */
-
-import { useState } from 'react';
-import Head from 'next/head';
-
+import React, { useState } from 'react';
 import styles from '@/styles/modal.module.css';
-import { Modal } from '@/components/Modal';
+import { ConfirmationModal } from '@/components/Modal/ConfirmationModal';
 
 export default function Home() {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
+
+	function handleConfirm() {
+		setModalIsOpen(false);
+		alert('Ação confirmada!');
+	}
+
+	function handleClose() {
+		setModalIsOpen(false);
+	}
 
 	return (
 		<>
@@ -25,7 +22,12 @@ export default function Home() {
 				</button>
 			</main>
 
-			{/* Renderizar modal de confirmação */}
+			<ConfirmationModal
+				isOpen={modalIsOpen}
+				onClose={handleClose}
+				onConfirm={handleConfirm}
+				content='Tem certeza que deseja realizar esta ação?'
+			/>
 		</>
 	);
 }
