@@ -1,10 +1,4 @@
-/**
- * Modal
- *
- * - O modal fecha ao clicar em qualquer elemento, resolva o problema
- */
-
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import styles from '@/styles/modal.module.css';
 import { Modal } from '@/components/Modal';
@@ -23,7 +17,7 @@ export default function Home() {
 
 	function renderModalContent() {
 		return (
-			<div data-modal-content className={styles['modal-form']}>
+			<div data-modal-content className={styles['modal-form']} onClick={(e) => e.stopPropagation()}>
 				<form onSubmit={() => false}>
 					<div>
 						<label htmlFor="input-name">Nome</label>
@@ -31,8 +25,8 @@ export default function Home() {
 					</div>
 
 					<div>
-						<label htmlFor="input-name">E-mail</label>
-						<input type="email" id="input-name" placeholder="Insira um e-mail válido" />
+						<label htmlFor="input-email">E-mail</label>
+						<input type="email" id="input-email" placeholder="Insira um e-mail válido" />
 					</div>
 				</form>
 			</div>
@@ -47,13 +41,12 @@ export default function Home() {
 				</button>
 			</main>
 
-			{/* modal */}
 			<Modal
 				isOpen={modalIsOpen}
 				title="Criar novo usuário"
 				onClose={handleModalClose}
 				onConfirm={handleModalConfirm}
-				footer={{ confirmText: 'Criar usuário' }}
+				footer={{ confirmText: 'Criar usuário', cancelText: 'Cancelar' }}
 			>
 				{renderModalContent()}
 			</Modal>
