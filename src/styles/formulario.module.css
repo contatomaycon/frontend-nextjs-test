@@ -30,3 +30,10 @@
 	width: 50%;
 	margin-left: auto;
 }
+
+.error {
+	color: red;
+	font-size: 12px;
+	margin-top: 4px;
+	display: block;
+  }
