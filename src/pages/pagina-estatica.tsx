@@ -25,7 +25,7 @@ interface ListaProps {
   initialCities: Array<ICity>;
 }
 
-export default function Lista({ initialCities }: ListaProps) {
+export default function Lista({ initialCities }: Readonly<ListaProps>) {
   const [cities, setCities] = useState<Array<ICity>>(initialCities);
 
   useEffect(() => {
