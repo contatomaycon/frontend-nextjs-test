@@ -38,7 +38,11 @@ export default function ContextApi() {
 
       <div className={styles['toast-container']}>
         {messages.map((message) => (
-          <ToastMessage key={message.id} content={message} onClose={removeMessage} />
+          <ToastMessage
+            key={message.id}
+            content={message}
+            onClose={removeMessage}
+          />
         ))}
       </div>
     </>

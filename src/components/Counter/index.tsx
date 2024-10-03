@@ -5,7 +5,10 @@ type CounterProps = {
   onUnmount: () => void;
 };
 
-export const Counter: React.FC<CounterProps> = ({ initialCount, onUnmount }) => {
+export const Counter: React.FC<CounterProps> = ({
+  initialCount,
+  onUnmount,
+}) => {
   const [count, setCount] = useState(initialCount);
   const TOTAL_COUNT = 10;
 
@@ -16,15 +19,17 @@ export const Counter: React.FC<CounterProps> = ({ initialCount, onUnmount }) => 
 
     return () => {
       const handleCounterUnmount = new CustomEvent('onCounterUnmount');
-	  	  
-	  if (count > 0) {
-      	window.dispatchEvent(handleCounterUnmount);
-	  }
+
+      if (count > 0) {
+        window.dispatchEvent(handleCounterUnmount);
+      }
     };
   }, []);
 
   useEffect(() => {
-    const handleCounterUpdate = new CustomEvent('onCounterUpdate', { detail: { count } });
+    const handleCounterUpdate = new CustomEvent('onCounterUpdate', {
+      detail: { count },
+    });
     window.dispatchEvent(handleCounterUpdate);
 
     if (count === TOTAL_COUNT) {

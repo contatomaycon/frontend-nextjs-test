@@ -12,7 +12,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "sonar": "sonar-scanner -X"
+    "sonar": "sonar-scanner -X",
+    "format": "prettier --config .prettierrc --write ."
   },
   "dependencies": {
     "@faker-js/faker": "^9.0.3",
@@ -26,6 +27,9 @@
     "typescript": "5.6.2"
   },
   "devDependencies": {
-    "sonar-scanner": "^3.1.0"
+    "sonar-scanner": "^3.1.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3"
   }
 }

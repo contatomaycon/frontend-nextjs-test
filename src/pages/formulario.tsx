@@ -8,7 +8,11 @@ interface IFormInput {
 }
 
 export default function Form() {
-  const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -17,13 +21,16 @@ export default function Form() {
     setServerError(null);
 
     try {
-      const response = await fetch('/api/users/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/create`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Failed to create user');
@@ -32,8 +39,9 @@ export default function Form() {
       const result = await response.json();
       console.log('User created:', result);
 
-      alert(`User created successfully!\nName: ${result.name}\nEmail: ${result.email}`);
-
+      alert(
+        `User created successfully!\nName: ${result.name}\nEmail: ${result.email}`
+      );
     } catch (error: any) {
       setServerError(error.message);
     } finally {
@@ -51,7 +59,9 @@ export default function Form() {
               placeholder="Name"
               {...register('name', { required: 'Name is required' })}
             />
-            {errors.name && <span className={styles.error}>{errors.name.message}</span>}
+            {errors.name && (
+              <span className={styles.error}>{errors.name.message}</span>
+            )}
           </div>
 
           <div className={styles.field}>
@@ -66,7 +76,9 @@ export default function Form() {
                 },
               })}
             />
-            {errors.email && <span className={styles.error}>{errors.email.message}</span>}
+            {errors.email && (
+              <span className={styles.error}>{errors.email.message}</span>
+            )}
           </div>
 
           <button type="submit" data-type="confirm" disabled={isSubmitting}>

@@ -17,7 +17,8 @@ export default function CicloDeVida({ initialCount }: CicloDeVidaProps) {
   useEffect(() => {
     const handleMount = () => console.log('onCounterMount');
     const handleUnmount = () => setShowCounter(false);
-    const handleUpdate = (event: CustomEventInit) => console.log('onCounterUpdate', event.detail);
+    const handleUpdate = (event: CustomEventInit) =>
+      console.log('onCounterUpdate', event.detail);
 
     window.addEventListener('onCounterMount', handleMount);
     window.addEventListener('onCounterUnmount', handleUnmount);
@@ -42,7 +43,10 @@ export default function CicloDeVida({ initialCount }: CicloDeVidaProps) {
             <h1>Exemplo de Ciclo de vida</h1>
 
             <div data-content>
-              <Counter initialCount={initialCount} onUnmount={() => setShowCounter(false)} />
+              <Counter
+                initialCount={initialCount}
+                onUnmount={() => setShowCounter(false)}
+              />
             </div>
           </>
         )}
@@ -51,7 +55,9 @@ export default function CicloDeVida({ initialCount }: CicloDeVidaProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<CicloDeVidaProps> = async () => {
+export const getServerSideProps: GetServerSideProps<
+  CicloDeVidaProps
+> = async () => {
   return {
     props: {
       initialCount: 0,

@@ -1,63 +1,80 @@
 import styles from './style.module.css';
 
 type ModalProps = {
-	children: React.ReactNode;
-	title: string;
-	isOpen: boolean;
-	onClose?: (type: 'click' | 'esc', target: EventTarget) => void;
-	onConfirm?: () => void;
-	footer?: {
-		hidden?: boolean;
-		confirmText?: string;
-		cancelText?: string;
-	};
+  children: React.ReactNode;
+  title: string;
+  isOpen: boolean;
+  onClose?: (type: 'click' | 'esc', target: EventTarget) => void;
+  onConfirm?: () => void;
+  footer?: {
+    hidden?: boolean;
+    confirmText?: string;
+    cancelText?: string;
+  };
 };
 
-export const Modal: React.FC<ModalProps> = ({ children, title, isOpen, ...props }) => {
-	function handleCloseClick(e: React.MouseEvent) {
-		const target = e.target as HTMLElement;
-		
-		if (target.dataset.modalWrapper || target.dataset.modalClose || target.dataset.modalCancel) {
-			props.onClose?.('click', e.target);
-		}
-	}
+export const Modal: React.FC<ModalProps> = ({
+  children,
+  title,
+  isOpen,
+  ...props
+}) => {
+  function handleCloseClick(e: React.MouseEvent) {
+    const target = e.target as HTMLElement;
 
-	function handleConfirmClick(e: React.MouseEvent) {
-		props.onConfirm?.();
-	}
+    if (
+      target.dataset.modalWrapper ||
+      target.dataset.modalClose ||
+      target.dataset.modalCancel
+    ) {
+      props.onClose?.('click', e.target);
+    }
+  }
 
-	function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-		if (e.key === 'Escape') props.onClose?.('esc', e.target);
-	}
+  function handleConfirmClick(e: React.MouseEvent) {
+    props.onConfirm?.();
+  }
 
-	if (!isOpen) return null;
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === 'Escape') props.onClose?.('esc', e.target);
+  }
 
-	return (
-		<div data-modal-wrapper className={styles.wrapper} onClick={handleCloseClick} onKeyDown={handleKeyDown}>
-			<div data-modal-container onClick={(e) => e.stopPropagation()}>
-				<header data-modal-header>
-					<h2>{title}</h2>
+  if (!isOpen) return null;
 
-					<button data-modal-close onClick={handleCloseClick}>
-						X
-					</button>
-				</header>
+  return (
+    <div
+      data-modal-wrapper
+      className={styles.wrapper}
+      onClick={handleCloseClick}
+      onKeyDown={handleKeyDown}
+    >
+      <div data-modal-container onClick={(e) => e.stopPropagation()}>
+        <header data-modal-header>
+          <h2>{title}</h2>
 
-				{children}
+          <button data-modal-close onClick={handleCloseClick}>
+            X
+          </button>
+        </header>
 
-				{!props.footer?.hidden && (
-					<div data-modal-footer>
-						<button data-modal-cancel onClick={handleCloseClick}>
-							{props.footer?.cancelText ?? 'Cancelar'}
-						</button>
+        {children}
 
-						<button data-modal-confirm onClick={handleConfirmClick} data-type="confirm">
-							{props.footer?.confirmText ?? 'Confirmar'}
-						</button>
-					</div>
-				)}
-			</div>
-		</div>
-	);
+        {!props.footer?.hidden && (
+          <div data-modal-footer>
+            <button data-modal-cancel onClick={handleCloseClick}>
+              {props.footer?.cancelText ?? 'Cancelar'}
+            </button>
+
+            <button
+              data-modal-confirm
+              onClick={handleConfirmClick}
+              data-type="confirm"
+            >
+              {props.footer?.confirmText ?? 'Confirmar'}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
-
