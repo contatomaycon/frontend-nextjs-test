@@ -13,6 +13,7 @@ export default function ContextApi() {
       message: 'Mensagem de sucesso',
       type: 'success',
     };
+
     addMessage(successMessage);
   }
 
@@ -22,6 +23,7 @@ export default function ContextApi() {
       message: 'Mensagem de erro',
       type: 'error',
     };
+
     addMessage(errorMessage);
   }
 

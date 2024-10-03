@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 
 type CounterProps = {
   initialCount: number;
@@ -11,32 +11,38 @@ export const Counter: React.FC<CounterProps> = ({
 }) => {
   const [count, setCount] = useState(initialCount);
   const TOTAL_COUNT = 10;
+  const hasMounted = useRef(false);
 
-  useEffect(() => {
-    const handleCounterMount = new CustomEvent('onCounterMount');
+  useLayoutEffect(() => {
+    if (!hasMounted.current) {
+      const handleCounterMount = new CustomEvent('onCounterMount');
+      window.dispatchEvent(handleCounterMount);
 
-    window.dispatchEvent(handleCounterMount);
+      hasMounted.current = true;
+    }
 
     return () => {
-      const handleCounterUnmount = new CustomEvent('onCounterUnmount');
+      if (!hasMounted.current) {
+        const handleCounterUnmount = new CustomEvent('onCounterUnmount');
 
-      if (count > 0) {
         window.dispatchEvent(handleCounterUnmount);
       }
     };
   }, []);
 
   useEffect(() => {
-    const handleCounterUpdate = new CustomEvent('onCounterUpdate', {
-      detail: { count },
-    });
-    window.dispatchEvent(handleCounterUpdate);
+    if (count && hasMounted.current) {
+      const handleCounterUpdate = new CustomEvent('onCounterUpdate', {
+        detail: { count },
+      });
+      window.dispatchEvent(handleCounterUpdate);
 
-    if (count === TOTAL_COUNT) {
-      const handleCounterUnmount = new CustomEvent('onCounterUnmount');
+      if (count >= TOTAL_COUNT) {
+        const handleCounterUnmount = new CustomEvent('onCounterUnmount');
+        window.dispatchEvent(handleCounterUnmount);
 
-      window.dispatchEvent(handleCounterUnmount);
-      onUnmount();
+        onUnmount();
+      }
     }
   }, [count, onUnmount]);
 

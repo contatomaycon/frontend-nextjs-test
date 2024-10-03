@@ -1,11 +1,42 @@
+import { useEffect, useState } from 'react';
 import styles from '@/styles/lista.module.css';
 import { ICity } from '@/types/city.d';
 
-interface ListaProps {
-  cities: Array<ICity>;
+async function fetchCities() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cities/10`);
+    const cities = await res.json();
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch cities');
+    }
+
+    return cities;
+  } catch (error) {
+    console.error('Failed to fetch cities', error);
+    return [
+      { id: '1', name: 'Fallback City 1' },
+      { id: '2', name: 'Fallback City 2' },
+    ];
+  }
 }
 
-export default function Lista({ cities }: ListaProps) {
+interface ListaProps {
+  initialCities: Array<ICity>;
+}
+
+export default function Lista({ initialCities }: ListaProps) {
+  const [cities, setCities] = useState<Array<ICity>>(initialCities);
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      const updatedCities = await fetchCities();
+      setCities(updatedCities);
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -24,31 +55,12 @@ export default function Lista({ cities }: ListaProps) {
 }
 
 export async function getStaticProps() {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cities/10`);
-    const cities = await res.json();
+  const cities = await fetchCities();
 
-    if (!res.ok) {
-      throw new Error('Failed to fetch cities');
-    }
-
-    return {
-      props: {
-        cities,
-      },
-      revalidate: 60,
-    };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      props: {
-        cities: [
-          { id: '1', name: 'Fallback City 1' },
-          { id: '2', name: 'Fallback City 2' },
-        ],
-      },
-      revalidate: 60,
-    };
-  }
+  return {
+    props: {
+      initialCities: cities,
+    },
+    revalidate: 60,
+  };
 }

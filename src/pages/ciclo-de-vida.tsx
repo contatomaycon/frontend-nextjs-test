@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { GetServerSideProps } from 'next/types';
 import styles from '@/styles/ciclo-de-vida.module.css';
 import { Counter } from '@/components/Counter';
@@ -9,14 +9,27 @@ type CicloDeVidaProps = {
 
 export default function CicloDeVida({ initialCount }: CicloDeVidaProps) {
   const [showCounter, setShowCounter] = useState(false);
+  const hasMounted = useRef(false);
 
   function handleOcultCounterClick() {
     setShowCounter((prevState) => !prevState);
   }
 
   useEffect(() => {
-    const handleMount = () => console.log('onCounterMount');
-    const handleUnmount = () => setShowCounter(false);
+    const handleMount = () => {
+      if (!hasMounted.current) {
+        console.log('onCounterMount');
+        hasMounted.current = true;
+      }
+    };
+
+    const handleUnmount = () => {
+      if (hasMounted.current) {
+        setShowCounter(false);
+        hasMounted.current = false;
+      }
+    };
+
     const handleUpdate = (event: CustomEventInit) =>
       console.log('onCounterUpdate', event.detail);
 

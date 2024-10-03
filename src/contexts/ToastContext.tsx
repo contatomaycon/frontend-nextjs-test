@@ -14,6 +14,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
 
   const addMessage = (message: IToastMessage) => {
     setMessages((prevMessages) => [...prevMessages, message]);
+
     setTimeout(() => removeMessage(message.id), 5000);
   };
 

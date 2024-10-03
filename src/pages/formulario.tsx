@@ -80,7 +80,7 @@ export default function Form() {
           </div>
 
           <div className={styles.field}>
-            <input type="email" placeholder="E-mail" {...register('email')} />
+            <input type="text" placeholder="E-mail" {...register('email')} />
             {errors.email && (
               <span className={styles.error}>{errors.email.message}</span>
             )}
